@@ -7,4 +7,26 @@ It's ideal for developers, researchers, and professionals who need accurate and 
 
 # Stacks
 
+## Express
+
+`npm install express`
+
 ## TypeScript
+
+`npm install --save-dev typescript @types/node @types/express ts-node nodemon`
+
+## Prisma ORM
+
+`npm install @prisma/client`
+` npm install prisma --save-dev`
+
+### Setting prisma ORM
+
+`npx prisma init` <br> <br>
+On .env file
+`DATABASE_URL="sqlite:./dev.db"` for SQLite database <br>
+or `DATABASE_URL="mysql://user:password@localhost:5432/mydatabase?schema=public"` for MySQL database<br> <br>
+Migrations <br>
+`npx prisma migrate dev --name init` <br> <br>
+Prisma Client <br>
+`npx prisma generate`
