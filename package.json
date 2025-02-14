@@ -1,0 +1,17 @@
+{
+  "name": "mozresourcesapi",
+  "version": "1.0.0",
+  "description": "Repository to get informations about Mozambique\r MozResourcesAPI is an application programming interface (API) that provides detailed information about the provinces, districts, cities, and natural resources of Mozambique. \r The API is designed to facilitate the access and integration of geographic, economic, and social data of Mozambique into your applications. \r It's ideal for developers, researchers, and professionals who need accurate and up-to-date information about the country.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.ts"
+  },
+  "keywords": [],
+  "author": "Yuvi Albino Matique",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "typescript": "^5.7.3"
+  }
+}
