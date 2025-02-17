@@ -14,14 +14,574 @@ datasource db {
 }
 model MozInfo {
   id      Int    @id @default(autoincrement())
-  title   String
-  content String
+  name   String
+  capitalCity String
+  oficialLanguage String
+  currency      String
+  officialCurrencyCode String
+  nativeCurrency String
+  area         Float
+  population    Int
+  flagUrl      String
+  // regionId     Int
+  timeZone String
+  // independenc
+  // region       Region @relation(fields: [regionId], references: [id])
+  // cities       City[]
+  // // countries    Country[]
+  // districts    District[]
+  // languages    Language[]
+  // religions    Religion[]
+  // political    Political[]
+  // economy      Economy[]
+  // education    Education[]
+  // healthcare    Healthcare[]
+  // infrastructure Infrastructure[]
+  // geography    Geography[]
+  // transportation Transportation[]
+  // trade         Trade[]
+  // utilities     Utilities[]
+  // miscellaneous Miscellaneous[]
+  // // worldFacts  WorldFacts[]
+  // // timeZone     TimeZone[]
+  // // languageCode  LanguageCode[]
+  // // worldCurrency WorldCurrency[]
+  // // worldLanguage WorldLanguage[]
+  // // worldRegion  WorldRegion[]
+  // // worldTime    WorldTime[]
+}
+//demographic
+// economic
+// historical
+// geographical
+// cultural
+// nativeLanguages
+// political
+model Economic{
+  id Int @id
+  currency  String
+  currencyCode String
+  pib String
+}
+model Historical{
+  id Int @id
+  independency String
+
+}
+model Demographic{
+  id Int @id
+  population String
+}
+model Images{
+  id Int @id
+  string String @unique
+  description String
+}
+model NativeLanguages{
+  id Int @id @default(autoincrement())
+  name String
+  description String
+
+  District District[]
+}
+model Region{
+  id            Int    @id @default(autoincrement())
+  name          String
+  // provinces   Province[]
 }
 model Province{
   id            Int    @id @default(autoincrement())
   name          String
+  districts   District[]
 }
 model District{
   id            Int    @id @default(autoincrement())
   name          String
+  provinceId   Int
+  provinces      Province @relation(fields: [provinceId], references: [id])
+  nativeLanguage NativeLanguages[]
 }
+model City{
+  id            Int    @id @default(autoincrement())
+  districtId   Int
+}
+model Culture{
+  id Int @id @default(autoincrement())
+  districtId Int
+  description String
+  
+}
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// model MozInfo {
+//   id                Int       @id @default(autoincrement())
+//   name              String
+//   capitalCity       String?
+//   officialLanguage  String?
+//   area              Float?
+//   population        BigInt?
+//   flagUrl           String?
+//   timeZone          String?
+
+//   geography         Geography?
+//   historical        Historical?
+//   administrative    Administrative?
+//   energy            Energy?
+//   transportation    Transportation?
+//   telecommunications Telecommunications?
+//   environment       Environment?
+//   faunaAndFlora     FaunaAndFlora?
+//   sports            Sports?
+//   media             Media?
+
+//   culture           Culture[]
+//   political         Political[]
+//   economic          Economic[]
+//   demographic       Demographic[]
+//   infrastructure    Infrastructure[]
+//   education         Education[]
+//   healthcare        Healthcare[]
+//   tourism           Tourism[]
+//   images            Image[]
+//   nativeLanguages   NativeLanguage[]
+//   historicalEvents  HistoricalEvent[]
+// }
+
+// model Geography {
+//   id        Int      @id @default(autoincrement())
+//   latitude  Float?
+//   longitude Float?
+//   mozInfo   MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId Int?
+// }
+
+// model Historical {
+//   id            Int      @id @default(autoincrement())
+//   independence  String?
+//   mozInfo       MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId     Int?
+// }
+
+// model HistoricalEvent {
+//   id          Int      @id @default(autoincrement())
+//   date        DateTime?
+//   description String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+// }
+
+// model Culture {
+//   id          Int      @id @default(autoincrement())
+//   description String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+
+//   music       Music[]
+//   cuisine     Cuisine[]
+//   festival    Festival[]
+// }
+
+// model Music {
+//   id          Int      @id @default(autoincrement())
+//   style       String?
+//   instruments String?
+//   culture     Culture? @relation(fields: [cultureId], references: [id])
+//   cultureId   Int?
+// }
+
+// model Cuisine {
+//   id          Int      @id @default(autoincrement())
+//   dish        String?
+//   ingredients String?
+//   culture     Culture? @relation(fields: [cultureId], references: [id])
+//   cultureId   Int?
+// }
+
+// model Festival {
+//   id          Int      @id @default(autoincrement())
+//   name        String?
+//   date        String?
+//   culture     Culture? @relation(fields: [cultureId], references: [id])
+//   cultureId   Int?
+// }
+
+// model Political {
+//   id          Int      @id @default(autoincrement())
+//   description String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+
+//   government   Government[]
+//   politicalParty PoliticalParty[]
+// }
+
+// model Government {
+//   id Int @id @default(autoincrement())
+//   description String?
+//   political   Political? @relation(fields: [politicalId], references: [id])
+//   politicalId Int?
+// }
+
+// model PoliticalParty {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   political   Political? @relation(fields: [politicalId], references: [id])
+//   politicalId Int?
+// }
+
+// model Economic {
+//   id          Int      @id @default(autoincrement())
+//   gdp         Decimal?
+//   currency    String?
+//   currencyCode String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+
+//   economicSector EconomicSector[]
+// }
+
+// model EconomicSector {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   description String?
+//   economic Economic? @relation(fields: [economicId], references: [id])
+//   economicId Int?
+// }
+
+// model Demographic {
+//   id          Int      @id @default(autoincrement())
+//   population  BigInt?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+
+//   ageGroup AgeGroup[]
+//   ethnicGroup EthnicGroup[]
+// }
+
+// model AgeGroup {
+//   id Int @id @default(autoincrement())
+//   description String?
+//   demographic Demographic? @relation(fields: [demographicId], references: [id])
+//   demographicId Int?
+// }
+
+// model EthnicGroup {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   demographic Demographic? @relation(fields: [demographicId], references: [id])
+//   demographicId Int?
+// }
+
+// model Infrastructure {
+//   id          Int      @id @default(autoincrement())
+//   description String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+
+//   roadNetwork RoadNetwork[]
+//   airport Airport[]
+//   port Port[]
+// }
+
+// model RoadNetwork {
+//   id Int @id @default(autoincrement())
+//   description String?
+//   infrastructure Infrastructure? @relation(fields: [infrastructureId], references: [id])
+//   infrastructureId Int?
+// }
+
+// model Airport {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   infrastructure Infrastructure? @relation(fields: [infrastructureId], references: [id])
+//   infrastructureId Int?
+// }
+
+// model Port {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   infrastructure Infrastructure? @relation(fields: [infrastructureId], references: [id])
+//   infrastructureId Int?
+// }
+
+// model Education {
+//   id          Int      @id @default(autoincrement())
+//   description String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+
+//   educationLevel EducationLevel[]
+// }
+
+// model EducationLevel {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   education Education? @relation(fields: [educationId], references: [id])
+//   educationId Int?
+// }
+
+// model Healthcare {
+//   id          Int      @id @default(autoincrement())
+//   description String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+
+//   healthFacility HealthFacility[]
+// }
+
+// model HealthFacility {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   healthcare Healthcare? @relation(fields: [healthcareId], references: [id])
+//   healthcareId Int?
+// }
+
+// model Tourism {
+//   id          Int      @id @default(autoincrement())
+//   description String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+
+//   touristAttraction TouristAttraction[]
+// }
+
+// model TouristAttraction {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   tourism Tourism? @relation(fields: [tourismId], references: [id])
+//   tourismId Int?
+// }
+
+// model Image {
+//   id          Int      @id @default(autoincrement())
+//   url         String   @unique
+//   description String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+// }
+
+// model NativeLanguage {
+//   id          Int      @id @default(autoincrement())
+//   name        String
+//   description String?
+//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId   Int?
+// }
+
+// model Administrative {
+//   id              Int      @id @default(autoincrement())
+//   governmentType  String?
+//   mozInfo         MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId       Int?
+
+//   administrativeDivision AdministrativeDivision[]
+// }
+
+// model AdministrativeDivision {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   administrative Administrative? @relation(fields: [administrativeId], references: [id])
+//   administrativeId Int?
+// }
+
+// model Energy {
+//   id             Int      @id @default(autoincrement())
+//   energySources  String?
+//   electricityProduction String?
+//   mozInfo        MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId      Int?
+
+//   renewableEnergy RenewableEnergy[]
+//   fossilFuel      FossilFuel[]
+// }
+
+// model RenewableEnergy {
+//   id Int @id @default(autoincrement())
+//   type String?
+//   energy Energy? @relation(fields: [energyId], references: [id])
+//   energyId Int?
+// }
+
+// model FossilFuel {
+//   id Int @id @default(autoincrement())
+//   type String?
+//   energy Energy? @relation(fields: [energyId], references: [id])
+//   energyId Int?
+// }
+
+// model Transportation {
+//   id             Int      @id @default(autoincrement())
+//   mozInfo        MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId      Int?
+
+//   roadNetwork    RoadNetwork[]
+//   railNetwork    RailNetwork[]
+//   airport        Airport[]
+//   port           Port[]
+// }
+
+// model RoadNetwork {
+//   id Int @id @default(autoincrement())
+//   description String?
+//   transportation Transportation? @relation(fields: [transportationId], references: [id])
+//   transportationId Int?
+// }
+
+// model RailNetwork {
+//   id Int @id @default(autoincrement())
+//   description String?
+//   transportation Transportation? @relation(fields: [transportationId], references: [id])
+//   transportationId Int?
+// }
+
+// model Airport {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   transportation Transportation? @relation(fields: [transportationId], references: [id])
+//   transportationId Int?
+// }
+
+// model Port {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   transportation Transportation? @relation(fields: [transportationId], references: [id])
+//   transportationId Int?
+// }
+
+// model Telecommunications {
+//   id              Int      @id @default(autoincrement())
+//   mozInfo         MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId       Int?
+
+//   telephone Telephone[]
+//   mobilePhone MobilePhone[]
+//   internet    Internet[]
+// }
+
+// model Telephone {
+//   id Int @id @default(autoincrement())
+//   lines String?
+//   telecommunications Telecommunications? @relation(fields: [telecommunicationsId], references: [id])
+//   telecommunicationsId Int?
+// }
+
+// model MobilePhone {
+//   id Int @id @default(autoincrement())
+//   subscribers String?
+//   telecommunications Telecommunications? @relation(fields: [telecommunicationsId], references: [id])
+//   telecommunicationsId Int?
+// }
+
+// model Internet {
+//   id Int @id @default(autoincrement())
+//   users String?
+//   telecommunications Telecommunications? @relation(fields: [telecommunicationsId], references: [id])
+//   telecommunicationsId Int?
+// }
+
+// model Environment {
+//   id                 Int      @id @default(autoincrement())
+//   mozInfo            MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId          Int?
+
+//   environmentalIssue EnvironmentalIssue[]
+//   protectedArea      ProtectedArea[]
+// }
+
+// model EnvironmentalIssue {
+//   id Int @id @default(autoincrement())
+//   description String?
+//   environment Environment? @relation(fields: [environmentId], references: [id])
+//   environmentId Int?
+// }
+
+// model ProtectedArea {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   environment Environment? @relation(fields: [environmentId], references: [id])
+//   environmentId Int?
+// }
+
+// model FaunaAndFlora {
+//   id           Int      @id @default(autoincrement())
+//   mozInfo      MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId    Int?
+
+//   endangeredSpecies EndangeredSpecies[]
+//   animal          Animal[]
+//   plant           Plant[]
+// }
+
+// model EndangeredSpecies {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   faunaAndFlora FaunaAndFlora? @relation(fields: [faunaAndFloraId], references: [id])
+//   faunaAndFloraId Int?
+// }
+
+// model Animal {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   faunaAndFlora FaunaAndFlora? @relation(fields: [faunaAndFloraId], references: [id])
+//   faunaAndFloraId Int?
+// }
+
+// model Plant {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   faunaAndFlora FaunaAndFlora? @relation(fields: [faunaAndFloraId], references: [id])
+//   faunaAndFloraId Int?
+// }
+
+// model Sports {
+//   id             Int      @id @default(autoincrement())
+//   mozInfo        MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId      Int?
+
+//   sport          Sport[]
+// }
+
+// model Sport {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   sports Sports? @relation(fields: [sportsId], references: [id])
+//   sportsId Int?
+// }
+
+// model Media {
+//   id              Int      @id @default(autoincrement())
+//   mozInfo         MozInfo? @relation(fields: [mozInfoId], references: [id])
+//   mozInfoId       Int?
+
+//   newspaper      Newspaper[]
+//   radioStation   RadioStation[]
+//   televisionStation TelevisionStation[]
+// }
+
+// model Newspaper {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   media Media? @relation(fields: [mediaId], references: [id])
+//   mediaId Int?
+// }
+
+// model RadioStation {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   media Media? @relation(fields: [mediaId], references: [id])
+//   mediaId Int?
+// }
+
+// model TelevisionStation {
+//   id Int @id @default(autoincrement())
+//   name String?
+//   media Media? @relation(fields: [mediaId], references: [id])
+//   mediaId Int?
+// }
