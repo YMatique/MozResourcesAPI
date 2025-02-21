@@ -212,7 +212,7 @@ model Historical {
 
 model HistoricalPeriod {
   id          Int      @id @default(autoincrement())
-  name        String? // Nome do período (ex: "Período Colonial")
+  name        String? // Nome do período (ex: "Período Colonial", "Pós Independência", etc)
   startDate   DateTime?
   endDate     DateTime?
   description String?
@@ -244,7 +244,122 @@ model HistoricalEvent {
   periodId    Int?
 }
 
+//CULTURA
 
+model Culture {
+  id          Int      @id @default(autoincrement())
+  description String?
+  // mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+  // mozInfoId   Int?
+
+  music       Music[]
+  cuisine     Cuisine[]
+  festival    Festival[]
+  art         Art[] // arte
+  literature  Literature[] // literatura
+  tradition   Tradition[] // tradições
+  clothing    Clothing[] // vestuário
+}
+
+//Musica
+model Music {
+  id          Int      @id @default(autoincrement())
+  style       String?
+  instruments String?
+  culture     Culture? @relation(fields: [cultureId], references: [id])
+  cultureId   Int?
+
+  // Sub-tabelas para detalhes da música (opcional)
+  artist Artist[]
+  genre Genre[]
+}
+
+//Artistas
+model Artist {
+  id Int @id @default(autoincrement())
+  name String?
+  music   Music[]
+  art     Art[]
+}
+
+//Generos
+model Genre {
+  id Int @id @default(autoincrement())
+  name String?
+  music Music? @relation(fields: [musicId], references: [id])
+  musicId Int?
+}
+
+//Pratos Típicos
+model Cuisine {
+  id          Int      @id @default(autoincrement())
+  dish        String?
+  ingredients String?
+  culture     Culture? @relation(fields: [cultureId], references: [id])
+  cultureId   Int?
+}
+
+model Festival {
+  id          Int      @id @default(autoincrement())
+  name        String?
+  date        String?
+  culture     Culture? @relation(fields: [cultureId], references: [id])
+  cultureId   Int?
+}
+
+//Arte
+model Art {
+  id          Int      @id @default(autoincrement())
+  type        String? // Tipo de arte (pintura, escultura, etc.)
+  description String?
+  culture     Culture? @relation(fields: [cultureId], references: [id])
+  cultureId   Int?
+
+  // Sub-tabelas para detalhes da arte (opcional)
+  artist Artist[]
+  style Style[]
+}
+
+model Style {
+  id Int @id @default(autoincrement())
+  name String?
+  art Art? @relation(fields: [artId], references: [id])
+  artId Int?
+}
+
+model Literature {
+  id          Int      @id @default(autoincrement())
+  genre       String? // Gênero literário (poesia, romance, etc.)
+  description String?
+  culture     Culture? @relation(fields: [cultureId], references: [id])
+  cultureId   Int?
+
+  // Sub-tabelas para detalhes da literatura (opcional)
+  author Author[]
+}
+
+model Author {
+  id Int @id @default(autoincrement())
+  name String?
+  literature Literature? @relation(fields: [literatureId], references: [id])
+  literatureId Int?
+}
+
+model Tradition {
+  id          Int      @id @default(autoincrement())
+  name        String?
+  description String?
+  culture     Culture? @relation(fields: [cultureId], references: [id])
+  cultureId   Int?
+}
+
+model Clothing {
+  id          Int      @id @default(autoincrement())
+  type        String? // Tipo de vestuário (tradicional, moderno, etc.)
+  description String?
+  culture     Culture? @relation(fields: [cultureId], references: [id])
+  cultureId   Int?
+}
 model Economic{
   id Int @id
   currency  String
