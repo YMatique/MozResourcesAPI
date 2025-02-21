@@ -198,17 +198,64 @@ model Characteristic {
   soil Soil? @relation(fields: [soilId], references: [id])
   soilId Int?
 }
+
+//HISTORIA
+model Historical {
+  id            Int      @id @default(autoincrement())
+  independence  String? // Data da independência
+  independenceProcess String? 
+  postIndependence String?
+  // mozInfo       MozInfo? @relation(fields: [mozInfoId], references: [id])
+  // mozInfoId     Int?
+  periods       HistoricalPeriod[]
+}
+
+model HistoricalPeriod {
+  id          Int      @id @default(autoincrement())
+  name        String? // Nome do período (ex: "Período Colonial")
+  startDate   DateTime?
+  endDate     DateTime?
+  description String?
+  isCurrent   Boolean?
+
+  historical  Historical? @relation(fields: [historicalId], references: [id])
+  historicalId Int?
+
+  figures     HistoricalFigure[]
+  events      HistoricalEvent[]
+}
+
+model HistoricalFigure {
+  id          Int      @id @default(autoincrement())
+  name        String?
+  biography   String?
+  image       String?
+  role        String? // Papel na história
+  period      HistoricalPeriod? @relation(fields: [periodId], references: [id])
+  periodId    Int?
+}
+
+model HistoricalEvent {
+  id          Int      @id @default(autoincrement())
+  date        DateTime?
+  description String?
+  impact      String? // Impacto do evento
+  period      HistoricalPeriod? @relation(fields: [periodId], references: [id])
+  periodId    Int?
+}
+
+
 model Economic{
   id Int @id
   currency  String
   currencyCode String
   pib String
 }
-model Historical{
-  id Int @id
-  independency String
+// model Historical{
+//   id Int @id
+//   independency String
 
-}
+// }
 model Demographic{
   id Int @id
   population String
