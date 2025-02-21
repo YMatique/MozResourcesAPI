@@ -12,7 +12,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-model MozInfo {
+model SummaryInfo {
   id      Int    @id @default(autoincrement())
   name   String
   capitalCity String
@@ -57,6 +57,147 @@ model MozInfo {
 // cultural
 // nativeLanguages
 // political
+
+// Geographic
+model Geography {
+  id        Int      @id @default(autoincrement())
+  latitude  Float?
+  longitude Float?
+  // mozInfo   MozInfo? @relation(fields: [mozInfoId], references: [id])
+  // mozInfoId Int?
+
+  relief    Relief?
+  hydrography Hydrography?
+  climate   Climate?
+  vegetation Vegetation?
+  soil      Soil?
+}
+
+//Relevo
+model Relief {
+  id Int @id @default(autoincrement())
+  description String? 
+  geography Geography? @relation(fields: [geographyId], references: [id])
+  geographyId Int?
+
+  // Sub-tabelas para detalhes do relevo
+  mountain   Mountain[]
+  plateau    Plateau[]
+  plain      Plain[]
+}
+//Montes
+model Mountain {
+  id Int @id @default(autoincrement())
+  name String?
+  altitude Float?
+  relief Relief? @relation(fields: [reliefId], references: [id])
+  reliefId Int?
+}
+
+//Planaltos
+model Plateau {
+  id Int @id @default(autoincrement())
+  name String?
+  area Float?
+  relief Relief? @relation(fields: [reliefId], references: [id])
+  reliefId Int?
+}
+//Planiceies
+model Plain {
+  id Int @id @default(autoincrement())
+  name String?
+  extension Float?
+  relief Relief? @relation(fields: [reliefId], references: [id])
+  reliefId Int?
+}
+
+//Hidrografia
+model Hydrography {
+  id Int @id @default(autoincrement())
+  description String? // Descrição geral da hidrografia
+  geography Geography? @relation(fields: [geographyId], references: [id])
+  geographyId Int?
+
+  // Sub-tabelas para detalhes da hidrografia
+  river River[]
+  lake  Lake[]
+}
+//Rios
+model River {
+  id Int @id @default(autoincrement())
+  name String?
+  length Float?
+  basin String? // Bacia hidrográfica
+  hydrography Hydrography? @relation(fields: [hydrographyId], references: [id])
+  hydrographyId Int?
+}
+//Lagos
+model Lake {
+  id Int @id @default(autoincrement())
+  name String?
+  area Float?
+  depth Float?
+  hydrography Hydrography? @relation(fields: [hydrographyId], references: [id])
+  hydrographyId Int?
+}
+
+//Clima
+model Climate {
+  id Int @id @default(autoincrement())
+  type String? // Tipo climático (tropical, subtropical, etc.)
+  temperatureAverage Float? // Temperatura média
+  precipitationAverage Float? // Precipitação média
+  geography Geography? @relation(fields: [geographyId], references: [id])
+  geographyId Int?
+
+  // Sub-tabelas para detalhes do clima (opcional)
+  season Season[] // Estações do ano
+}
+model Season {
+  id Int @id @default(autoincrement())
+  name String?
+  temperatureAverage Float?
+  precipitationAverage Float?
+  climate Climate? @relation(fields: [climateId], references: [id])
+  climateId Int?
+}
+//Vegetação
+model Vegetation {
+  id Int @id @default(autoincrement())
+  type String? // Tipo de vegetação (floresta, savana, etc.)
+  geography Geography? @relation(fields: [geographyId], references: [id])
+  geographyId Int?
+
+  // Sub-tabelas para detalhes da vegetação (opcional)
+  species Species[] // Espécies de plantas
+}
+
+//Espécies
+model Species {
+  id Int @id @default(autoincrement())
+  name String?
+  vegetation Vegetation? @relation(fields: [vegetationId], references: [id])
+  vegetationId Int?
+}
+
+//Solo
+model Soil {
+  id Int @id @default(autoincrement())
+  type String // Tipo de solo (argiloso, arenoso, etc.)
+  geography Geography? @relation(fields: [geographyId], references: [id])
+  geographyId Int?
+
+  // Sub-tabelas para detalhes do solo (opcional)
+  characteristic Characteristic[] // Características do solo
+}
+
+//Características do solo
+model Characteristic {
+  id Int @id @default(autoincrement())
+  description String?
+  soil Soil? @relation(fields: [soilId], references: [id])
+  soilId Int?
+}
 model Economic{
   id Int @id
   currency  String
