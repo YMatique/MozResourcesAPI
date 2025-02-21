@@ -316,7 +316,7 @@ model Style {
   art Art? @relation(fields: [artId], references: [id])
   artId Int?
 }
-
+//Literatura
 model Literature {
   id          Int      @id @default(autoincrement())
   genre       String? // Gênero literário (poesia, romance, etc.)
@@ -342,19 +342,39 @@ model Tradition {
 }
 
 
+//ECONOMICO 
+model Economic {
+  id          Int      @id @default(autoincrement())
+  gdp         Decimal?  // pib
+  currency    String? 
+  currencyCode String?
+  inflationRate Decimal? //taxa de inflação
+  unemploymentRate Decimal? //taxa de desempregado
+  externalDebt Decimal?
+  povertyRate Decimal?
+  giniIndex Decimal? // taxa de distribuição de renda
 
+  // mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
+  // mozInfoId   Int?
 
-model Economic{
-  id Int @id
-  currency  String
-  currencyCode String
-  pib String
+  sectors     EconomicSector[]
 }
-// model Historical{
-//   id Int @id
-//   independency String
 
-// }
+model EconomicSector {
+  id          Int      @id @default(autoincrement())
+  name        String? // Nome do setor (ex: "Agricultura")
+  description String?
+  percentageOfGdp Decimal? // Participação no PIB
+  employmentRate Decimal? // Taxa de emprego no setor
+
+  economic    Economic? @relation(fields: [economicId], references: [id])
+  economicId  Int?
+}
+
+// (Modelo Trade opcional, dependendo da necessidade de detalhes)
+
+
+
 model Demographic{
   id Int @id
   population String
