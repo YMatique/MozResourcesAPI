@@ -256,7 +256,6 @@ model Culture {
   art         Art[] // arte
   literature  Literature[] // literatura
   tradition   Tradition[] // tradições
-  clothing    Clothing[] // vestuário
 }
 
 //Musica
@@ -269,7 +268,7 @@ model Music {
 
   // Sub-tabelas para detalhes da música (opcional)
   artist Artist[]
-  genre Genre[]
+  // genre Genre[]
 }
 
 //Artistas
@@ -278,14 +277,6 @@ model Artist {
   name String?
   music   Music[]
   art     Art[]
-}
-
-//Generos
-model Genre {
-  id Int @id @default(autoincrement())
-  name String?
-  music Music? @relation(fields: [musicId], references: [id])
-  musicId Int?
 }
 
 //Pratos Típicos
