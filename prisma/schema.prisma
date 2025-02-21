@@ -80,7 +80,6 @@ model Relief {
   geography Geography? @relation(fields: [geographyId], references: [id])
   geographyId Int?
 
-  // Sub-tabelas para detalhes do relevo
   mountain   Mountain[]
   plateau    Plateau[]
   plain      Plain[]
@@ -118,7 +117,6 @@ model Hydrography {
   geography Geography? @relation(fields: [geographyId], references: [id])
   geographyId Int?
 
-  // Sub-tabelas para detalhes da hidrografia
   river River[]
   lake  Lake[]
 }
@@ -333,8 +331,6 @@ model Literature {
   description String?
   culture     Culture? @relation(fields: [cultureId], references: [id])
   cultureId   Int?
-
-  // Sub-tabelas para detalhes da literatura (opcional)
   author Author[]
 }
 
@@ -353,13 +349,7 @@ model Tradition {
   cultureId   Int?
 }
 
-model Clothing {
-  id          Int      @id @default(autoincrement())
-  type        String? // Tipo de vestuário (tradicional, moderno, etc.)
-  description String?
-  culture     Culture? @relation(fields: [cultureId], references: [id])
-  cultureId   Int?
-}
+
 model Economic{
   id Int @id
   currency  String
