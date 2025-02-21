@@ -37,7 +37,7 @@ model SummaryInfo {
   // education    Education[]
   // healthcare    Healthcare[]
   // infrastructure Infrastructure[]
-  // geography    Geography[]
+  geography    Geography[]
   // transportation Transportation[]
   // trade         Trade[]
   // utilities     Utilities[]
@@ -63,14 +63,14 @@ model Geography {
   id        Int      @id @default(autoincrement())
   latitude  Float?
   longitude Float?
-  // mozInfo   MozInfo? @relation(fields: [mozInfoId], references: [id])
-  // mozInfoId Int?
+  mozInfo   SummaryInfo? @relation(fields: [mozInfoId], references: [id])
+  mozInfoId Int?
 
-  relief    Relief?
-  hydrography Hydrography?
-  climate   Climate?
-  vegetation Vegetation?
-  soil      Soil?
+  relief    Relief[]
+  hydrography Hydrography[]
+  climate   Climate[]
+  vegetation Vegetation[]
+  soil      Soil[]
 }
 
 //Relevo
@@ -147,8 +147,6 @@ model Climate {
   precipitationAverage Float? // Precipitação média
   geography Geography? @relation(fields: [geographyId], references: [id])
   geographyId Int?
-
-  // Sub-tabelas para detalhes do clima (opcional)
   season Season[] // Estações do ano
 }
 model Season {
@@ -166,7 +164,6 @@ model Vegetation {
   geography Geography? @relation(fields: [geographyId], references: [id])
   geographyId Int?
 
-  // Sub-tabelas para detalhes da vegetação (opcional)
   species Species[] // Espécies de plantas
 }
 
@@ -185,7 +182,6 @@ model Soil {
   geography Geography? @relation(fields: [geographyId], references: [id])
   geographyId Int?
 
-  // Sub-tabelas para detalhes do solo (opcional)
   characteristic Characteristic[] // Características do solo
 }
 
@@ -354,9 +350,6 @@ model Economic {
   povertyRate Decimal?
   giniIndex Decimal? // taxa de distribuição de renda
 
-  // mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
-  // mozInfoId   Int?
-
   sectors     EconomicSector[]
 }
 
@@ -371,56 +364,91 @@ model EconomicSector {
   economicId  Int?
 }
 
-// (Modelo Trade opcional, dependendo da necessidade de detalhes)
+//DEMOGRAFICO
+model Demographic {
+  id          Int      @id @default(autoincrement())
+  population  BigInt?
+  populationDensity Float?
+  birthRate Float?
+  deathRate Float?
+  lifeExpectancy Float?
+  urbanPopulation BigInt?
+  ruralPopulation BigInt?
 
-
-
-model Demographic{
-  id Int @id
-  population String
+  ageGroup AgeGroup[]
+  ethnicGroup EthnicGroup[]
 }
+
+model AgeGroup {
+  id Int @id @default(autoincrement())
+  description String? // Descrição da faixa etária (ex: "0-14 anos")
+  population BigInt? // Número de pessoas na faixa etária
+
+  demographic Demographic? @relation(fields: [demographicId], references: [id])
+  demographicId Int?
+}
+
+model EthnicGroup {
+  id Int @id @default(autoincrement())
+  name String?
+  population BigInt? // Número de pessoas no grupo étnico
+
+  demographic Demographic? @relation(fields: [demographicId], references: [id])
+  demographicId Int?
+}
+
+
+//PROVINCIAS, CIDADES, DISTRITOS
+model Province {
+  id    Int     @id @default(autoincrement())
+  name  String?
+  district District[]
+}
+model District {
+  id    Int     @id @default(autoincrement())
+  name  String?
+
+  province   Province? @relation(fields: [provinceId], references: [id])
+  provinceId Int?
+
+  municipality  Municipality?
+  languages   Language[]
+  details     DistrictDetails?
+  City City?
+}
+model City{
+  id            Int    @id @default(autoincrement())
+  districtId   Int @unique
+  district District @relation(fields: [districtId], references: [id])
+}
+model Municipality {
+  id    Int     @id @default(autoincrement())
+  district   District @relation(fields: [districtId], references: [id])
+  districtId Int @unique
+}
+
+model Language {
+  id    Int     @id @default(autoincrement())
+  name  String?
+  district District[]
+}
+model DistrictDetails {
+  id          Int      @id @default(autoincrement())
+  description String?
+  population  BigInt?
+  area        Float?
+  district   District @relation(fields: [districtId], references: [id])
+  districtId Int @unique
+}
+
 model Images{
   id Int @id
   string String @unique
   description String
 }
-model NativeLanguages{
-  id Int @id @default(autoincrement())
-  name String
-  description String
 
-  District District[]
-}
-model Region{
-  id            Int    @id @default(autoincrement())
-  name          String
-  // provinces   Province[]
-}
-model Province{
-  id            Int    @id @default(autoincrement())
-  name          String
-  districts   District[]
-}
-model District{
-  id            Int    @id @default(autoincrement())
-  name          String
-  provinceId   Int
-  provinces      Province @relation(fields: [provinceId], references: [id])
-  nativeLanguage NativeLanguages[]
-}
-model City{
-  id            Int    @id @default(autoincrement())
-  districtId   Int
-}
 
-// generator client {
-//   provider = "prisma-client-js"
-// }
 
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
 
 // model MozInfo {
 //   id                Int       @id @default(autoincrement())
@@ -456,63 +484,7 @@ model City{
 //   historicalEvents  HistoricalEvent[]
 // }
 
-// model Geography {
-//   id        Int      @id @default(autoincrement())
-//   latitude  Float?
-//   longitude Float?
-//   mozInfo   MozInfo? @relation(fields: [mozInfoId], references: [id])
-//   mozInfoId Int?
-// }
 
-// model Historical {
-//   id            Int      @id @default(autoincrement())
-//   independence  String?
-//   mozInfo       MozInfo? @relation(fields: [mozInfoId], references: [id])
-//   mozInfoId     Int?
-// }
-
-// model HistoricalEvent {
-//   id          Int      @id @default(autoincrement())
-//   date        DateTime?
-//   description String?
-//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
-//   mozInfoId   Int?
-// }
-
-// model Culture {
-//   id          Int      @id @default(autoincrement())
-//   description String?
-//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
-//   mozInfoId   Int?
-
-//   music       Music[]
-//   cuisine     Cuisine[]
-//   festival    Festival[]
-// }
-
-// model Music {
-//   id          Int      @id @default(autoincrement())
-//   style       String?
-//   instruments String?
-//   culture     Culture? @relation(fields: [cultureId], references: [id])
-//   cultureId   Int?
-// }
-
-// model Cuisine {
-//   id          Int      @id @default(autoincrement())
-//   dish        String?
-//   ingredients String?
-//   culture     Culture? @relation(fields: [cultureId], references: [id])
-//   cultureId   Int?
-// }
-
-// model Festival {
-//   id          Int      @id @default(autoincrement())
-//   name        String?
-//   date        String?
-//   culture     Culture? @relation(fields: [cultureId], references: [id])
-//   cultureId   Int?
-// }
 
 // model Political {
 //   id          Int      @id @default(autoincrement())
@@ -538,48 +510,6 @@ model City{
 //   politicalId Int?
 // }
 
-// model Economic {
-//   id          Int      @id @default(autoincrement())
-//   gdp         Decimal?
-//   currency    String?
-//   currencyCode String?
-//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
-//   mozInfoId   Int?
-
-//   economicSector EconomicSector[]
-// }
-
-// model EconomicSector {
-//   id Int @id @default(autoincrement())
-//   name String?
-//   description String?
-//   economic Economic? @relation(fields: [economicId], references: [id])
-//   economicId Int?
-// }
-
-// model Demographic {
-//   id          Int      @id @default(autoincrement())
-//   population  BigInt?
-//   mozInfo     MozInfo? @relation(fields: [mozInfoId], references: [id])
-//   mozInfoId   Int?
-
-//   ageGroup AgeGroup[]
-//   ethnicGroup EthnicGroup[]
-// }
-
-// model AgeGroup {
-//   id Int @id @default(autoincrement())
-//   description String?
-//   demographic Demographic? @relation(fields: [demographicId], references: [id])
-//   demographicId Int?
-// }
-
-// model EthnicGroup {
-//   id Int @id @default(autoincrement())
-//   name String?
-//   demographic Demographic? @relation(fields: [demographicId], references: [id])
-//   demographicId Int?
-// }
 
 // model Infrastructure {
 //   id          Int      @id @default(autoincrement())
