@@ -242,6 +242,7 @@ model HistoricalEvent {
   periodId    Int?
 }
 
+
 //CULTURA
 
 model Culture {
@@ -341,6 +342,8 @@ model Tradition {
 }
 
 
+
+
 model Economic{
   id Int @id
   currency  String
@@ -389,12 +392,7 @@ model City{
   id            Int    @id @default(autoincrement())
   districtId   Int
 }
-model Culture{
-  id Int @id @default(autoincrement())
-  districtId Int
-  description String
-  
-}
+
 // generator client {
 //   provider = "prisma-client-js"
 // }
